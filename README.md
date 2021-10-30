@@ -1,4 +1,4 @@
-# jsonojs
+# json.js
 
 A spec-compliant JSON parser written in JS (because why not?)
 
