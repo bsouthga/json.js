@@ -1,0 +1,46 @@
+{
+  "devDependencies": {
+    "@types/node": "16.10.3",
+    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "@typescript-eslint/parser": "5.0.0",
+    "eslint": "8.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "prettier": "2.4.1",
+    "rollup": "^2.58.0",
+    "typescript": "4.4.3",
+    "uglify-js": "^3.14.2"
+  },
+  "scripts": {
+    "lint": "prettier --write ./src/**/*.ts ./test/**/*.ts && eslint --fix ./src/**/*.ts ./test/**/*.ts",
+    "build": "rm -rf ./dist && tsc",
+    "bundle-umd": "rollup --format=umd --output.name=jsonojs --file=./dist/bundle.js -- ./dist/src/index.js",
+    "bundle-module": "rollup --format=module --output.name=jsonojs --file=./dist/bundle.mjs -- ./dist/src/index.js",
+    "bundle": "npm run build && npm run bundle-umd && npm run bundle-module && `npm bin`/uglifyjs --compress --mangle -o ./dist/bundle.min.js -- ./dist/bundle.js",
+    "test": "npm run build -- --module commonjs && node ./dist/test/index.js"
+  },
+  "prettier": {
+    "parser": "typescript",
+    "printWidth": 80,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:import/typescript"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "eslint-plugin-import"
+    ],
+    "rules": {
+      "import/order": 2,
+      "no-fallthrough": 0,
+      "@typescript-eslint/explicit-function-return-type": 2,
+      "@typescript-eslint/no-inferrable-types": 0
+    }
+  },
+  "eslintIgnore": ["dist", "node_modules"]
+}
