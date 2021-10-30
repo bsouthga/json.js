@@ -26,7 +26,7 @@ This repo leverages the great set of test cases from  https://github.com/nst/JSO
 It's not very fast...
 
 ```
-➜  json.js git:(main) ✗ npm run bench
+➜  json.js git:(main) ✗ npm run bench  
 
 > bench
 > npm run build -- --module commonjs && node ./dist/benchmark/index.js
@@ -35,8 +35,8 @@ It's not very fast...
 > build
 > rm -rf ./dist && tsc "--module" "commonjs"
 
-parsing: lib=633.07ms, builtin=34.62ms
-stringify: lib=360.84ms, builtin=27.59ms
+parsing: medians -> lib=616.41ms, builtin=34.8ms (lib is 17.71x slower)
+stringify: medians -> lib=354.32ms, builtin=27.22ms (lib is 13.02x slower)
 ```
 ## Used JS built-ins
 

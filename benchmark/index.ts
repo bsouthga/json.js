@@ -52,7 +52,10 @@ function report(
   lib: ReadonlyArray<number>,
   builtin: ReadonlyArray<number>,
 ): string {
-  return `lib=${median(lib)}ms, builtin=${median(builtin)}ms`;
+  const l = median(lib);
+  const b = median(builtin);
+  const x = round(l / b);
+  return `medians -> lib=${l}ms, builtin=${b}ms (lib is ${x}x slower)`;
 }
 
 console.log(`parsing: ${report(libParse, builtinParse)}`);
