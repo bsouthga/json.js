@@ -21,6 +21,23 @@ The only scenarios I can imagine where this might be useful...
 
 This repo leverages the great set of test cases from  https://github.com/nst/JSONTestSuite
 
+## Benchmark
+
+It's not very fast...
+
+```
+➜  json.js git:(main) ✗ npm run bench
+
+> bench
+> npm run build -- --module commonjs && node ./dist/benchmark/index.js
+
+
+> build
+> rm -rf ./dist && tsc "--module" "commonjs"
+
+parsing: lib=633.07ms, builtin=34.62ms
+stringify: lib=360.84ms, builtin=27.59ms
+```
 ## Used JS built-ins
 
 - String.fromCharCode(...)

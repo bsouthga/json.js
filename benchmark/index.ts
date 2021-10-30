@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { parse, stringify } from '../src/index';
 
 const DATA = readFileSync('./data/data.json').toString();
-const ITERATIONS = 100;
+const ITERATIONS = 50;
 
 function test<T>(
   payload: T,
@@ -27,12 +27,36 @@ const builtinParse = test(DATA, (s) => JSON.parse(s));
 const libStringify = test(parsed, stringify);
 const builtinStringify = test(parsed, (v) => JSON.stringify(v));
 
+function round(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
+function median(values: ReadonlyArray<number>): number {
+  const sorted = values.slice().sort();
+  const total = sorted.length;
+  const middle = Math.floor(sorted.length / 2);
+  if (total % 2 === 0) {
+    return round((sorted[middle - 1] + sorted[middle]) / 2);
+  }
+  return round(sorted[middle]);
+}
+
 function rows(
   values: ReadonlyArray<number>,
   name: string,
 ): ReadonlyArray<string> {
   return values.map((v, i) => [name, i, v].join(','));
 }
+
+function report(
+  lib: ReadonlyArray<number>,
+  builtin: ReadonlyArray<number>,
+): string {
+  return `lib=${median(lib)}ms, builtin=${median(builtin)}ms`;
+}
+
+console.log(`parsing: ${report(libParse, builtinParse)}`);
+console.log(`stringify: ${report(libStringify, builtinStringify)}`);
 
 writeFileSync(
   './data/results.csv',
