@@ -11,11 +11,14 @@
     "uglify-js": "^3.14.2"
   },
   "scripts": {
+    "fetch-payload": "curl -s https://raw.githubusercontent.com/WebKit/WebKit/ab7171c1d63acb8c77216b5a11f98323b56b998b/PerformanceTests/JetStream2/SeaMonster/inspector-json-payload.js | sed 's/let obj/module.exports/' > ./data/raw.js",
+    "get-test-json": "node -e \"require('fs').writeFileSync('./data/data.json', JSON.stringify(require('./data/raw.js')));\"",
     "lint": "prettier --write ./src/**/*.ts ./test/**/*.ts && eslint --fix ./src/**/*.ts ./test/**/*.ts",
     "build": "rm -rf ./dist && tsc",
     "bundle-umd": "rollup --format=umd --output.name=jsonojs --file=./dist/bundle.js -- ./dist/src/index.js",
     "bundle-module": "rollup --format=module --output.name=jsonojs --file=./dist/bundle.mjs -- ./dist/src/index.js",
     "bundle": "npm run build && npm run bundle-umd && npm run bundle-module && `npm bin`/uglifyjs --compress --mangle -o ./dist/bundle.min.js -- ./dist/bundle.js",
+    "bench": "npm run build -- --module commonjs && node ./dist/benchmark/index.js",
     "test": "npm run build -- --module commonjs && node ./dist/test/index.js"
   },
   "prettier": {

@@ -1,6 +1,6 @@
 import { ParseAction } from './ParseAction';
 import ArrayFrame from './frames/ArrayFrame';
-import { isWhitespace } from './utilities/characters';
+import { fillSpaces, isWhitespace } from './utilities/characters';
 import err, { ErrorCode, ParseError } from './ParseError';
 import { FrameType } from './FrameType';
 import type { Frame } from './FrameUnion';
@@ -49,6 +49,17 @@ export default class Parser {
       return this.resolve();
     } catch (error) {
       if (error instanceof ParseError) {
+        const start = Math.max(index - 10, 0);
+        const end = Math.min(index + 10, input.length);
+        const context = input.slice(start, end);
+        const pointer = [
+          fillSpaces(index - start),
+          '^',
+          fillSpaces(end - index),
+        ].join('');
+        console.log(
+          `parsing failed at index ${index}:\n${context}\n${pointer}`,
+        );
         const frames = this.frames;
         throw error.withState({ index, frames });
       }
@@ -102,8 +113,8 @@ export default class Parser {
   }
 
   private pop(): void {
-    const frame = this.peek(1);
-    const parent = this.peek(2);
+    const frame = this.peek(0);
+    const parent = this.peek(1);
 
     if (frame == null) {
       err(ErrorCode.POP_NO_FRAME);

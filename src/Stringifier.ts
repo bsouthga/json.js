@@ -1,5 +1,5 @@
 import { JSONArray, JSONObject, JSONValue, Replacer } from './types';
-import { escapeString } from './utilities/characters';
+import { escapeString, fillSpaces } from './utilities/characters';
 
 const enum Type {
   KEY,
@@ -190,9 +190,7 @@ function getFrame(type: BasicFrame['type']): BasicFrame {
 }
 
 function resolveSpaces(spaces: number | string | null): string | null {
-  return typeof spaces === 'number'
-    ? new Array(spaces).fill(' ').join('')
-    : spaces;
+  return typeof spaces === 'number' ? fillSpaces(spaces) : spaces;
 }
 
 function identityReplacer(

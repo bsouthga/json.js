@@ -105,3 +105,7 @@ export function escapeString(value: string): string {
   pieces.push('"');
   return pieces.join('');
 }
+
+export function fillSpaces(n: number): string {
+  return new Array(n).fill(' ').join('');
+}

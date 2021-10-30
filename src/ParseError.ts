@@ -26,13 +26,15 @@ type ParseState = {
   readonly frames: ReadonlyArray<JSONFrame>;
 };
 
-export class ParseError extends Error {
+export class ParseError {
+  private error: Error;
   constructor(
     private code: ErrorCode,
     private state: ParseState | null = null,
   ) {
-    super(getMessage(code));
-    this.stack; // evaluate stack for v8
+    const error = new Error(getMessage(this.code));
+    error.stack;
+    this.error = error;
   }
 
   withState(state: ParseState): ParseError {
@@ -45,6 +47,10 @@ export class ParseError extends Error {
 
   getIndex(): number | null {
     return this.state?.index ?? null;
+  }
+
+  getMessage(): string {
+    return getMessage(this.code);
   }
 }
 
