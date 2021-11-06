@@ -1,7 +1,7 @@
 import { ParseAction } from './ParseAction';
 import ArrayFrame from './frames/ArrayFrame';
-import { fillSpaces, isWhitespace } from './utilities/characters';
-import err, { ErrorCode, ParseError } from './ParseError';
+import { isWhitespace } from './utilities/characters';
+import err, { ErrorCode, logContext, ParseError } from './ParseError';
 import { FrameType } from './FrameType';
 import type { Frame } from './FrameUnion';
 import NumberFrame from './frames/NumberFrame';
@@ -25,7 +25,7 @@ export default class Parser {
   private frames: Frame[] = [new RootFrame()];
   private data = false;
 
-  public constructor(private input: string) {}
+  public constructor(private input: string, private verbose = false) {}
 
   public parse(): JSONValue {
     const input = this.input;
@@ -49,17 +49,9 @@ export default class Parser {
       return this.resolve();
     } catch (error) {
       if (error instanceof ParseError) {
-        const start = Math.max(index - 10, 0);
-        const end = Math.min(index + 10, input.length);
-        const context = input.slice(start, end);
-        const pointer = [
-          fillSpaces(index - start),
-          '^',
-          fillSpaces(end - index),
-        ].join('');
-        console.log(
-          `parsing failed at index ${index}:\n${context}\n${pointer}`,
-        );
+        if (this.verbose) {
+          logContext(input, index);
+        }
         const frames = this.frames;
         throw error.withState({ index, frames });
       }

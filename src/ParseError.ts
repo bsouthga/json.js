@@ -1,4 +1,5 @@
 import type JSONFrame from './frames/JSONFrame';
+import { fillSpaces } from './utilities/characters';
 
 export const enum ErrorCode {
   EMPTY,
@@ -85,4 +86,12 @@ function getMessage(code: ErrorCode): string {
     case ErrorCode.UNEXPECTED_ROOT_DATA:
       return 'unexpected root level data';
   }
+}
+
+export function logContext(input: string, index: number): void {
+  const start = Math.max(index - 10, 0);
+  const end = Math.min(index + 10, input.length);
+  const context = input.slice(start, end);
+  const pointer = `${fillSpaces(index - start)}^${fillSpaces(end - index)}`;
+  console.log(`parsing failed at index ${index}:\n${context}\n${pointer}`);
 }

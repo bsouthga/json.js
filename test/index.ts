@@ -23,7 +23,6 @@ function test(filename: string, json: string): void {
       threw = true;
     }
     if (!threw) {
-      console.log(result);
       throw new Error(`built-in json parser threw, but jsonojs did not`);
     }
   }
